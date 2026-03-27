@@ -1,0 +1,16 @@
+div {
+  margin-left: auto;
+}
+
+/* related resource: _utilities.scss:67:9 */
+.bg-dark { /* the element was nav.navbar.navbar-dark.bg-dark.px-4.position-relative */
+  position: sticky;
+  top: 0px;
+  z-index: 1020;
+}
+
+/* related resource: _tables.scss:166:5 */
+.table-responsive { /* the element was .table-responsive */
+  max-height: 300px;
+  overflow-y: auto;
+}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<!-- saved from url=(0059)file:///C:/Users/rbd3692/Desktop/WSS/project/dashboard.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock System Dashboard</title>
+    <link href="./dashboard_files/bootstrap.min.css" rel="stylesheet">
+    <style>
+      body.dark { background-color: #121212; color: #e0e0e0; transition: background 0.3s; }
+      body.dark .card, body.dark .navbar, body.dark .form-control, body.dark .table { background-color: #1e1e1e; color: #e0e0e0; border-color: #333; }
+      body.dark .form-control::placeholder { color: #666; }
+      .navbar-brand { font-weight: bold; letter-spacing: 2px; }
+      .history-container { max-height: 400px; overflow-y: auto; }
+    </style>
+  </head>
+<body class="dark" data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4 shadow-sm mb-4">
+      <div class="container-fluid">
+        <span class="navbar-brand mx-auto">STOCK SYSTEM</span>
+        <div class="d-flex align-items-center">
+          <button class="btn btn-outline-light btn-sm me-2" onclick="toggleMode()" id="theme-toggle">&#127769; Mode</button>
+          <button class="btn btn-outline-danger btn-sm" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="row g-4">
+        <!-- Forms Column -->
+        <div class="col-lg-6">
+          <div class="card shadow-sm p-4 mb-4">
+            <h5 class="mb-4 text-primary">Withdraw Stock</h5>
+            <div class="row g-3">
+              <div class="col-md-6"><input id="w-sku" class="form-control" placeholder="SKU (e.g. SKU-123)"></div>
+              <div class="col-md-6"><input id="w-qty" type="number" class="form-control" placeholder="Qty"></div>
+              <div class="col-12"><input id="w-desc" class="form-control" placeholder="Description/Remarks"></div>
+              <div class="col-12"><button class="btn btn-primary w-100" onclick="processStock(&#39;withdraw&#39;)">Withdraw</button></div>
+            </div>
+          </div>
+
+          <div class="card shadow-sm p-4">
+            <h5 class="mb-4 text-success">Add New Inventory</h5>
+            <div class="row g-3">
+              <div class="col-md-6"><input id="a-sku" class="form-control" placeholder="SKU"></div>
+              <div class="col-md-6"><input id="a-qty" type="number" class="form-control" placeholder="Qty"></div>
+              <div class="col-12"><input id="a-desc" class="form-control" placeholder="Description"></div>
+              <div class="col-12"><button class="btn btn-success w-100" onclick="processStock(&#39;add&#39;)">Add Stock</button></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- History Column -->
+        <div class="col-lg-6">
+          <div class="card shadow-sm p-4 h-100">
+            <h5 class="mb-4">Transaction History</h5>
+            <div class="history-container">
+              <table class="table table-hover">
+                <thead class="sticky-top bg-dark">
+                  <tr><th>Item</th><th>Change</th><th>Date</th></tr>
+                </thead>
+                <tbody id="history-log">
+                  <tr><td>Sample SKU</td><td><span class="text-success">+10</span></td><td>3/27/2026</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <script>
+    function toggleMode() {
+      const isDark = document.body.classList.toggle('dark');
+      const btn = document.getElementById('theme-toggle');
+      btn.innerText = isDark ? '&#127769; Mode' : '&#9728;&#65039; Mode';
+      btn.className = isDark ? 'btn btn-outline-light btn-sm me-2' : 'btn btn-outline-dark btn-sm me-2';
+    }
+
+    function processStock(type) {
+      const prefix = type === 'add' ? 'a-' : 'w-';
+      const sku = document.getElementById(prefix + 'sku').value;
+      const qty = document.getElementById(prefix + 'qty').value;
+      const desc = document.getElementById(prefix + 'desc').value;
+
+      if (!sku || !qty) return alert('SKU and Quantity are required.');
+
+      const tbody = document.getElementById('history-log');
+      const row = document.createElement('tr');
+      const changeClass = type === 'add' ? 'text-success' : 'text-danger';
+      const symbol = type === 'add' ? '+' : '-';
+
+      row.innerHTML = `
+        <td><strong>${sku}</strong><br><small class="text-muted">${desc}</small></td>
+        <td class="${changeClass}">${symbol}${qty}</td>
+        <td>${new Date().toLocaleDateString()}</td>
+      `;
+      tbody.prepend(row);
+
+      // Clear fields
+      document.getElementById(prefix + 'sku').value = '';
+      document.getElementById(prefix + 'qty').value = '';
+      document.getElementById(prefix + 'desc').value = '';
+    }
+
+    function logout() {
+      if(confirm('Log out?')) window.location.href = 'index.html';
+    }
+  </script></body></html>
